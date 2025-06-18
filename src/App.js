@@ -13,10 +13,6 @@ import {
   multicorePriority
 } from './helpers/handle_values';
 
-import { useEffect } from 'react';
-
-import { validateScheduleResult } from './helpers/validate_results';
-
 function App() {
   const [count, setCount] = useState('');
   const [processes, setProcesses] = useState([]);
@@ -25,16 +21,16 @@ function App() {
   const [selectedAlgo, setSelectedAlgo] = useState('FCFS');
   const [isDescending, setIsDescending] = useState(true);
 
-  const [firstCome, setFirstCome] = useState([]);
-  const [preEmp, setPreEmp] = useState([]);
-  const [nonPreEmp, setNonPreEmp] = useState([]);
-  const [robin, setRobin] = useState([]);
-  const [prioNon, setPrioNon] = useState([]);
-  const [prio, setPrio] = useState([]);
-  const [multiFCFS, setMultiFCFS] = useState([]);
-  const [multiRoundRobin, setMultiRoundRobin] = useState([]);
-  const [multiNonPreemptiveSJF, setMultiNonPreemptiveSJF] = useState([]);
-  const [multiPriority, setMultiPriority] = useState([]);
+  const [firstCome, setFirstCome] = useState({ result: [], timeline: [] });
+  const [preEmp, setPreEmp] = useState({ result: [], timeline: [] });
+  const [nonPreEmp, setNonPreEmp] = useState({ result: [], timeline: [] });
+  const [robin, setRobin] = useState({ result: [], timeline: [] });
+  const [prioNon, setPrioNon] = useState({ result: [], timeline: [] });
+  const [prio, setPrio] = useState({ result: [], timeline: [] });
+  const [multiFCFS, setMultiFCFS] = useState({ result: [], timeline: [] });
+  const [multiRoundRobin, setMultiRoundRobin] = useState({ result: [], timeline: [] });
+  const [multiNonPreemptiveSJF, setMultiNonPreemptiveSJF] = useState({ result: [], timeline: [] });
+  const [multiPriority, setMultiPriority] = useState({ result: [], timeline: [] });
 
 
 
@@ -68,17 +64,16 @@ function App() {
     setSelectedAlgo('FCFS');
     setIsDescending(true);
 
-    setFirstCome([]);
-    setNonPreEmp([]);
-    setPreEmp([]);
-    setRobin([]);
-    setPrioNon([]);
-    setPrio([]);
-
-    setMultiFCFS([]);
-    setMultiRoundRobin([]);
-    setMultiNonPreemptiveSJF([]);
-    setMultiPriority([]);
+    setFirstCome({ result: [], timeline: [] });
+    setNonPreEmp({ result: [], timeline: [] });
+    setPreEmp({ result: [], timeline: [] });
+    setRobin({ result: [], timeline: [] });
+    setPrioNon({ result: [], timeline: [] });
+    setPrio({ result: [], timeline: [] });
+    setMultiFCFS({ result: [], timeline: [] });
+    setMultiRoundRobin({ result: [], timeline: [] });
+    setMultiNonPreemptiveSJF({ result: [], timeline: [] });
+    setMultiPriority({ result: [], timeline: [] });
   };
 
   const isAllPriorityNaN = (processes) => {
@@ -124,10 +119,6 @@ function App() {
     }
   };
 
-  // useEffect(() => {
-  //   validateScheduleResult();
-  // }, []);
-
   return (
 
     <Container sx={{ p: 4 }}>
@@ -159,13 +150,13 @@ function App() {
         value={selectedAlgo}
         onChange={(e) => {
           const value = e.target.value;
-          setSelectedAlgo(value); 
+          setSelectedAlgo(value);
           console.log('Selected algorithm:', value);
         }}
         fullWidth
         sx={{ mb: 3 }}
       >
-       {numCores === 1 && [
+        {numCores === 1 && [
           <MenuItem key="FCFS" value="FCFS">FCFS</MenuItem>,
           <MenuItem key="NonPreemptiveSJF" value="NonPreemptiveSJF">Non-Preemptive SJF</MenuItem>,
           <MenuItem key="PreemptiveSJF" value="PreemptiveSJF">Preemptive SJF</MenuItem>,
@@ -196,7 +187,7 @@ function App() {
         />
       }
 
-      {(selectedAlgo === "PriorityPreemptive" || selectedAlgo === "PriorityNonPreemptive") && (
+      {(selectedAlgo === "PriorityPreemptive" || selectedAlgo === "PriorityNonPreemptive" || selectedAlgo === "MulticorePriority") && (
         <TextField
           select
           label="Is Descending Priority?"
@@ -215,44 +206,48 @@ function App() {
         <Button variant="contained" color="primary" onClick={handleClear}>Clear</Button>
       </Box>
 
-      {selectedAlgo === 'FCFS' && firstCome.length > 0 && (
-        <ScheduleTable schedule={firstCome} name="FCFS" />
-      )}
-      {selectedAlgo === 'NonPreemptiveSJF' && nonPreEmp.length > 0 && (
-        <ScheduleTable schedule={nonPreEmp} name="Non-Preemptive SJF" />
-      )}
-      {selectedAlgo === 'PreemptiveSJF' && preEmp.length > 0 && (
-        <ScheduleTable schedule={preEmp} name="Preemptive SJF" />
-      )}
-      {selectedAlgo === 'RoundRobin' && robin.length > 0 && (
-        <ScheduleTable schedule={robin} name="Round Robin" />
-      )}
-      {selectedAlgo === 'PriorityNonPreemptive' && prioNon.length > 0 && (
-        <ScheduleTable schedule={prioNon} name="Priority (Non-Preemptive)" />
-      )}
-      {selectedAlgo === 'PriorityPreemptive' && prio.length > 0 && (
-        <ScheduleTable schedule={prio} name="Priority (Preemptive)" />
+      {selectedAlgo === 'FCFS' && firstCome.result?.length > 0 && (
+        <ScheduleTable schedule={firstCome.result} timeline={firstCome.timeline} name="FCFS" />
       )}
 
-      {selectedAlgo === 'MulticoreFCFS' && multiFCFS.length > 0 && (
-        <ScheduleTable schedule={multiFCFS} name="Multicore FCFS" />
+      {selectedAlgo === 'NonPreemptiveSJF' && nonPreEmp.result?.length > 0 && (
+        <ScheduleTable schedule={nonPreEmp.result} timeline={nonPreEmp.timeline} name="Non-Preemptive SJF" />
       )}
 
-      {selectedAlgo === 'MulticoreRoundRobin' && multiRoundRobin.length > 0 && (
-        <ScheduleTable schedule={multiRoundRobin} name="Multicore Round Robin" />
+      {selectedAlgo === 'PreemptiveSJF' && preEmp.result?.length > 0 && (
+        <ScheduleTable schedule={preEmp.result} timeline={preEmp.timeline} name="Preemptive SJF" />
       )}
 
-      {selectedAlgo === 'MulticoreNonPreemptiveSJF' && multiNonPreemptiveSJF.length > 0 && (
-        <ScheduleTable schedule={multiNonPreemptiveSJF} name="Multicore Non-Preemptive SJF" />
+      {selectedAlgo === 'RoundRobin' && robin.result?.length > 0 && (
+        <ScheduleTable schedule={robin.result} timeline={robin.timeline} name="Round Robin" />
       )}
 
-      {selectedAlgo === 'MulticorePriority' && multiPriority.length > 0 && (
-        <ScheduleTable schedule={multiPriority} name="Multicore Priority" />
+      {selectedAlgo === 'PriorityNonPreemptive' && prioNon.result?.length > 0 && (
+        <ScheduleTable schedule={prioNon.result} timeline={prioNon.timeline} name="Priority (Non-Preemptive)" />
       )}
 
-    
+      {selectedAlgo === 'PriorityPreemptive' && prio.result?.length > 0 && (
+        <ScheduleTable schedule={prio.result} timeline={prio.timeline} name="Priority (Preemptive)" />
+      )}
+
+      {selectedAlgo === 'MulticoreFCFS' && multiFCFS.result?.length > 0 && (
+        <ScheduleTable schedule={multiFCFS.result} timeline={multiFCFS.timeline} name="Multicore FCFS" />
+      )}
+
+      {selectedAlgo === 'MulticoreRoundRobin' && multiRoundRobin.result?.length > 0 && (
+        <ScheduleTable schedule={multiRoundRobin.result} timeline={multiRoundRobin.timeline} name="Multicore Round Robin" />
+      )}
+
+      {selectedAlgo === 'MulticoreNonPreemptiveSJF' && multiNonPreemptiveSJF.result?.length > 0 && (
+        <ScheduleTable schedule={multiNonPreemptiveSJF.result} timeline={multiNonPreemptiveSJF.timeline} name="Multicore Non-Preemptive SJF" />
+      )}
+
+      {selectedAlgo === 'MulticorePriority' && multiPriority.result?.length > 0 && (
+        <ScheduleTable schedule={multiPriority.result} timeline={multiPriority.timeline} name="Multicore Priority" />
+      )}
+
     </Container>
-    
+
   );
 }
 
