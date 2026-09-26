@@ -1,70 +1,77 @@
-# Getting Started with Create React App
+# App-Stack Kit
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A working application you fork to start your own. **Everything this app does, it declares in
+`app/config`.** There is no application source here; App-Stack arrives as a versioned release in
+`vendor/`, which `bun run unpack` extracts into a gitignored `.app-stack/`.
 
-## Available Scripts
+```sh
+bun run unpack && bun install     # required first — extract the framework, link the workspace
+cp .env.example .env
+bun run start                      # http://localhost:3000
+```
 
-In the project directory, you can run:
+Register the first account: it creates the first organisation and becomes its admin.
 
-### `npm start`
+## What is here
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+| Page | Shows |
+|---|---|
+| `/` | a page a visitor may see, with no account and no session |
+| `/articles` | a form and a grid — server sort, filter, paging, a relation column, row actions |
+| `/board` | the same lifecycle drawn as lanes |
+| `/articles/:id` | a detail page and the row's audit history |
+| `/insights` | a declared query, drawn as a report and a chart |
+| `/admin` | the organisation, its members and its invitations |
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+Two models carry it: `article` — a lifecycle, a relation, a field only editors may read, an upload —
+and `topic`, the relation's target.
 
-### `npm test`
+```
+app/config/
+  models/*.yaml      resources — storage, API, gates, schemas
+  views/*.yaml       routes and component trees
+  queries/*.yaml     declared joins, filters, measures
+  theme.yaml         design tokens
+  icons.yaml         this app's drawings
+app/hooks/*.ts       the code escape hatch, referenced as path#export
+vendor/              the framework, packaged
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Documentation
 
-### `npm run build`
+| | |
+|---|---|
+| [`docs/FORKING.md`](docs/FORKING.md) | Fork it, strip it back, take later improvements |
+| [`docs/DEPLOYING-RAILWAY.md`](docs/DEPLOYING-RAILWAY.md) | What to set, what to ask, what to check |
+| [`docs/reference/stack/17-capabilities.md`](docs/reference/stack/17-capabilities.md) | What the framework does, indexed by need — and what it does not |
+| [`docs/reference/stack/16-building-a-feature.md`](docs/reference/stack/16-building-a-feature.md) | One feature across every layer, in the order you work |
+| [`docs/reference/stack/`](docs/reference/stack/) | The full reference, for the version this app runs |
+| [`docs/reference/learnings/`](docs/reference/learnings/) | The traps that bite an app author |
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+`docs/reference/` is committed and readable on a fresh clone. `bun run sync-reference` regenerates
+it from `vendor/` whenever the framework version changes.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Two rules
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+**Config compiles at boot and only at boot.** A YAML edit does nothing until the process restarts,
+and an unchanged page after an edit is the expected result.
 
-### `npm run eject`
+**`.app-stack/` is rebuilt from `vendor/` on every build.** An edit there cannot ship and is gone at
+the next unpack. A missing component, prop or keyword is a framework change: fix it in App-Stack, cut
+a release, drop the tarball in `vendor/`, bump `.app-stack-version`.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## Tracking your own work
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+`docs/plans/ROADMAP.md`, `docs/audit/` and `.claude/goodbehavior/memory/` start empty and are yours to
+fill. The skills below write into them: audit finds the gaps, roadmap sequences them, gate-build
+works through them one at a time, and each records what it learned where the next session will look.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## Skills and profiles
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+`.claude/skills/` carries the GoodBehavior method and the App-Stack skills, project-scoped and yours
+to edit.
 
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+`.claude/goodbehavior/profiles/` carries four profiles, and this kit runs `development`. A profile
+fixes what "done" means for a kind of work — the real thing, what verifying is, what counts as
+evidence. For a fork whose output is a dataset, research, or something written for an audience,
+choose from [`INDEX.md`](.claude/goodbehavior/profiles/INDEX.md) instead.
