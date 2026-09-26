@@ -1,0 +1,38 @@
+id: areas
+route: /setup/areas
+navOrder: 5
+nav: Areas
+title: Areas
+requires: area
+x-access:
+  read: "'admin' in actor.roles"
+node:
+  type: PageShell
+  props:
+    title: Areas
+    subtitle: >-
+      Where a batch grows from transplant to harvest. Plant sites feed the
+      sowing plan, so keep them current.
+  children:
+    - type: SessionBar
+    - type: Navigation
+    - type: FormScreen
+      props:
+        model: area
+        op: create
+        title: New area
+        submitLabel: Add area
+        fields: [greenhouseId, name, plantSites, active]
+    - type: DataGrid
+      props:
+        model: area
+        pageSize: 25
+        editHref: /setup/areas/:id
+        editIcon: edit
+        deletable: true
+        deleteIcon: trash
+        columns:
+          - { field: name, label: Area }
+          - { field: greenhouseId, label: Greenhouse }
+          - { field: plantSites, label: Plant sites }
+          - { field: active, label: Active }

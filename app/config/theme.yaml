@@ -1,7 +1,7 @@
-title: appkit-scaffold
+title: Farm Ops
 # Quote every value containing "#": an unquoted hash starts a YAML comment and
 # truncates the value. Boot refuses it, but it is easy to write.
 colors:
-  accent: "#2f6df6"
+  accent: "#2e7d32"
 radius:
   control: 0.5rem

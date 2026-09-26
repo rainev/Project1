@@ -1,12 +1,12 @@
 {
-  "name": "app-stack-kit",
+  "name": "farm-ops",
   "private": true,
   "type": "module",
   "workspaces": [
     ".app-stack/packages/*"
   ],
   "scripts": {
-    "start": "bun run .app-stack/packages/cli/src/run.ts app/config --dist .app-stack/dist --title 'App-Stack Kit'",
+    "start": "bun run .app-stack/packages/cli/src/run.ts app/config --dist .app-stack/dist --title 'Farm Ops'",
     "unpack": "rm -rf .app-stack && mkdir -p .app-stack && tar xzf vendor/app-stack-$(cat .app-stack-version).tar.gz -C .app-stack --strip-components=1",
     "sync-reference": "bash scripts/sync-reference.sh"
   }

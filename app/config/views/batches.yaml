@@ -1,0 +1,68 @@
+id: batches
+route: /batches
+navOrder: 2
+nav: Batches
+title: Batches
+requires: batch
+node:
+  type: PageShell
+  props:
+    title: Batches
+    subtitle: >-
+      One row per sowing. The check, transplant and harvest dates are worked
+      out from the seeding date; each step asks for its count.
+  children:
+    - type: SessionBar
+    - type: Navigation
+    - type: FormScreen
+      props:
+        model: batch
+        op: create
+        title: New batch
+        submitLabel: Seed batch
+        fields: [areaId, seededOn, cellsSown, seedsPerCell, note]
+        multiline: [note]
+    - type: DataGrid
+      props:
+        model: batch
+        pageSize: 10
+        filterField: title
+        rowHref: /batches/:id
+        rowActions:
+          - op: check
+            label: Germination check
+            icon: check
+            title: Record the germination check
+            description: Count the cells that came up and the cells you re-seeded.
+            when:
+              state: seeded
+          - op: transplant
+            label: Transplant
+            icon: send
+            title: Record the transplant
+            description: How many plants went to the area, and how many were discarded.
+            when:
+              state: checked
+          - op: harvest
+            label: Harvest
+            icon: sparkles
+            title: Record the harvest
+            description: The total weight cut from this batch, in kg.
+            when:
+              state: transplanted
+          - op: discard
+            label: Mark lost
+            icon: trash
+            title: Mark this batch as lost?
+            description: Say what happened. The area becomes free.
+            when:
+              state: [seeded, checked, transplanted]
+        columns:
+          - { field: title, label: Lot }
+          - { field: areaId, label: Area }
+          - { field: status, label: Stage }
+          - { field: seededOn, label: Seeded }
+          - { field: checkOn, label: Check }
+          - { field: transplantOn, label: Transplant }
+          - { field: harvestFrom, label: Harvest from }
+          - { field: germinationPct, label: Germination % }

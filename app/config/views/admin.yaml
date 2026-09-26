@@ -14,8 +14,8 @@
 # other gate speaks, and the server re-checks every route regardless.
 id: admin
 route: /admin
-navOrder: 5
-nav: t:nav.admin
+navOrder: 6
+nav: Admin
 title: Administration
 x-access:
   read: "'admin' in actor.roles || 'platform' in actor.roles"
@@ -24,11 +24,9 @@ node:
   props:
     title: Administration
     subtitle: >-
-      The organisation, its members and its invitations. Adopted from the
-      framework, not rebuilt here.
+      The farm's team: who is a member, their role, and invitations.
   children:
     - type: SessionBar
-    - type: LanguagePicker
     - type: Navigation
     - type: OrgScreen
       props:

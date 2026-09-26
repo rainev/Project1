@@ -1,8 +1,9 @@
 # Farm ops — hydroponic lettuce: batches, today's tasks, readings, dashboard
 
-_Status checked against the code 2026-09-26: `app/config/models/` holds only the kit demos
-(`article.yaml`, `topic.yaml`, `ticket.yaml`) and `app/hooks/` does not exist, so **nothing of this
-initiative is built**, and nothing is verified. Gaps come from `docs/audit/01`–`05`._
+_Status checked against the code and the running app 2026-09-26: `app/config/models/` holds
+`greenhouse`, `area` and `batch`; `app/hooks/batch.ts` exists; the kit demos are gone. **Phase 1
+is built, and every item was driven live (evidence below). It is waiting on the owner's
+confirmation**, so it is not closed. Phases 2–5 are not built. Gaps come from `docs/audit/01`–`05`._
 
 **Done means, for every item:** the owner's flow works in the running app, driven in a browser the way
 a staff member would (at phone width where the team uses it), with a screenshot or the real response as
@@ -26,21 +27,35 @@ evidence, **and the owner has confirmed it**. A boot that passes is not done.
 - A built-in schedule cannot mean "Wednesday" or be edited in the app. So routines are data, and one
   `1h` schedule runs a code action.
 
-## NOW — Phase 1: the batch cycle, end to end
+## NOW — Phase 1: the batch cycle, end to end — built, awaiting owner confirmation
 
 The owner's priority is germination. This phase delivers it and proves the one mechanism everything
 else leans on: a code hook computing and storing values.
 
-| ID | What | Gap | Sev | Verify |
+| ID | What | Gap | Sev | Status |
 |---|---|---|---|---|
-| P1.1 | Strip the kit demos (`article`, `topic`, `ticket`, their views and query) and make the app English only (drop `languages` and `fil.yaml`). Home becomes a short farm landing page. | G4.6, G5.3 | P1 | Boot succeeds; nav shows only farm pages; `/fil/...` returns no page |
-| P1.2 | `greenhouse` model and `area` model (greenhouse lookup, name, plant sites, active), with admin-only writes and an admin page to maintain them. Seed nothing; the owner enters 3 × 4. | G3.1, G3.6, G5.2 | P0 | As admin, add a greenhouse and 4 areas in the browser; as staff, the edit controls are absent |
-| P1.3 | `batch` model: area (required at create), seeded date (defaults to today, Manila time), cells sown, seeds per cell, lot code; `x-states` `seeded → checked → transplanted → harvested`, plus `lost` from any stage. Each transition `require`s its count: `check` needs germinated and re-seeded cells, `transplant` needs transplanted and lost, `harvest` needs `harvestKg`. | G1.1, G1.3, G1.5, G1.6, G4.8 | P0 | Create a batch in the browser; drive every transition; a missing count is refused on the field |
-| P1.4 | `app/hooks/batch.ts`, the app's first code. On create it sets `checkOn` (+3), `transplantOn` (+17), `harvestFrom`/`harvestTo` (+45/+47) and `seedWeek`, all in Manila time. On `check` it computes `germinationPct`; on `transplant` it computes `survivalPct` and moves the harvest window to the real transplant date + 28/30. It refuses a second active batch in the same area. | G1.2, G3.4, G4.1 | P0 | Create a batch seeded on Wed 2026-09-30 and read back check Sat 10-03, transplant 10-17, harvest 11-14 to 11-16; the check with 90 of 100 cells stores 90%; a second batch in that area is refused |
-| P1.5 | Batch pages: a board by stage (`BoardScreen`), a list (`DataGrid`), and a detail page with its history (`TimelineScreen`). | G1.3 | P1 | Drive a batch from lane to lane on the board at 390px and 1280px widths; screenshot both |
+| P1.1 | Strip the kit demos and make the app English only. Home is a short farm landing page. | G4.6, G5.3 | P1 | `✔` Boots with models `greenhouse, area, batch` and the system models only. Nav: Home, Batches, By stage, Greenhouses, Areas, Admin. Every label is literal, because with no `languages` block `t:` keys render raw. Evidence: `01-home.png` |
+| P1.2 | `greenhouse` and `area` models, owner-maintained, each on its own page (`/setup/greenhouses`, `/setup/areas`, `/setup/areas/:id`). | G3.1, G3.6, G5.2 | P0 | `✔` A greenhouse and two areas were added through the forms (201 each); the area form's greenhouse is a lookup picker. As staff, the nav shows only Home, Batches and By stage; `POST /v0/create/area` → **403**; `/setup/areas` does not exist for them. Evidence: `03-areas.png`, `v05-staff-batches-390.png` |
+| P1.3 | `batch` model: area (required), seeded date (defaults to today in Manila), cells sown, seeds per cell, lot code as `title`; stages `seeded → checked → transplanted → harvested` plus `lost`, each step requiring its count. | G1.1, G1.3, G1.5, G1.6, G4.8 | P0 | `✔` Every step was driven in the browser. check 90/8 → 200; transplant 85/5 → 200; harvest 12.5 kg → 200; mark lost with a note → 200. Check with 150 of 100 cells → **422 on the field**: "cannot be more than the 100 cells sown". Evidence: `v02-batches-after-check.png` |
+| P1.4 | `app/hooks/batch.ts`: planned dates, `seedWeek`, lot code, germination % and transplanted %, the harvest window moved to the real transplant date, and no overlapping batches in an area. | G1.2, G3.4, G4.1 | P0 | `✔` Seeded Wed 2026-09-30 stored check **10-03**, transplant **10-17**, harvest **11-14 → 11-16**, week `2026-W40`, lot `2026-W40-GH1-AREA-1`. At the check: `germinationPct` 90. At transplant: `transplantPct` 85, and the window moved to transplant + 28/30. Steps are stamped with the Manila date. An overlapping seed (10-07) was refused on the Area field: "GH1 Area 1 is taken by batch 2026-W40-GH1-AREA-1 until 2026-11-16". After harvest the same seed was accepted. Evidence: `v01-overlap-refused.png` |
+| P1.5 | Batch pages: a list, a by-stage view, and a detail page with history and the next step's form. | G1.3, G5.5 | P1 | `✔` The **By stage** page is tabs of grids with step dialogs (replacing `BoardScreen`, see below). As staff at 390px, the check was recorded from the detail page's form (`POST /v0/check/batch/<id>` → 200, 95%), and the form then became Transplant. Horizontal overflow at 390px is 0 on every staff page. Evidence: `v06-stages-*.png`, `v10-detail-checked-390.png`, `v04-detail.png` |
 
-**Proves along the way:** a transition's `require` rendered as a dialog (G2.9's mechanism) and a
-`path#export` hook firing. Batches 02–04 depend on both.
+Evidence screenshots are in `docs/plans/evidence/farm-ops-phase1/`.
+
+**Two changes from the plan, both forced by the framework (recorded in `.claude/goodbehavior/memory/`):**
+- **No `BoardScreen`.** It sorts lanes by `title` and its move buttons send no payload, so every step
+  failed from a card (`v03-board-after-move.png`). The **By stage** page does the same job, and its
+  rows open dialogs that ask for the count.
+- **Phone steps live on the detail page.** At 390px a grid's row dialog opens under the grid's
+  pinned actions column, which covers Confirm (`v07-dialog-viewport-390.png`). So each step is also
+  a full-width form on `/batches/:id`, shown only in the stage that admits it. On a phone: tap the
+  lot, record the step.
+
+**Design refinement:** an area is reserved from transplant to harvest, not from seeding, so the
+next batch can be seeded into an area whose crop will be out before it arrives.
+
+**Owner to confirm:** walk it yourself: add your 3 greenhouses and 12 areas with their real plant
+sites, seed a batch, and record a check from your phone.
 
 ## NEXT — Phase 2: Today and the schedule manager
 

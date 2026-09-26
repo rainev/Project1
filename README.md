@@ -1,39 +1,43 @@
-# App-Stack Kit
+# Farm Ops
 
-A working application you fork to start your own. **Everything this app does, it declares in
-`app/config`.** There is no application source here; App-Stack arrives as a versioned release in
-`vendor/`, which `bun run unpack` extracts into a gitignored `.app-stack/`.
+Seed-to-harvest tracking for a hydroponic lettuce farm, built on App-Stack. **Everything the app
+does is declared in `app/config`**, except the date and ratio arithmetic config cannot express,
+which lives in `app/hooks/`. App-Stack arrives as a versioned release in `vendor/`, and
+`bun run unpack` extracts it into a gitignored `.app-stack/`.
 
 ```sh
-bun run unpack && bun install     # required first — extract the framework, link the workspace
+bun run unpack && bun install     # required first (bun ≥ 1.4) — extract the framework, link the workspace
 cp .env.example .env
 bun run start                      # http://localhost:3000
 ```
 
-Register the first account: it creates the first organisation and becomes its admin.
+Register the first account: it creates the farm's organisation and becomes its admin.
 
 ## What is here
 
-| Page | Shows |
-|---|---|
-| `/` | a page a visitor may see, with no account and no session |
-| `/articles` | a form and a grid — server sort, filter, paging, a relation column, row actions |
-| `/board` | the same lifecycle drawn as lanes |
-| `/articles/:id` | a detail page and the row's audit history |
-| `/insights` | a declared query, drawn as a report and a chart |
-| `/admin` | the organisation, its members and its invitations |
+| Page | Who | Shows |
+|---|---|---|
+| `/` | anyone | what the app is, and sign-in |
+| `/batches` | staff, admin | seed a batch; every batch with its planned dates and germination % |
+| `/board` | staff, admin | batches by stage, one tab per stage, with each row's next step |
+| `/batches/:id` | staff, admin | one batch, the form for its next step, and its history |
+| `/setup/greenhouses`, `/setup/areas` | admin | the greenhouses and their areas, with plant sites |
+| `/admin` | admin | the team: members, roles, invitations |
 
-Two models carry it: `article` — a lifecycle, a relation, a field only editors may read, an upload —
-and `topic`, the relation's target.
+The cycle (owner, 2026-09-26): seed on Wednesday; germination check on day 3; transplant 14 days
+after the check (day 17); harvest once, 28–30 days after transplant. `app/hooks/batch.ts` works
+out those dates in Manila time, the lot code, the germination and transplant percentages, and
+refuses two batches whose greenhouse time overlaps in one area.
+
+The plan is `docs/plans/FARM-OPS.md`, and the gap register behind it is `docs/audit/`.
 
 ```
 app/config/
   models/*.yaml      resources — storage, API, gates, schemas
   views/*.yaml       routes and component trees
-  queries/*.yaml     declared joins, filters, measures
   theme.yaml         design tokens
   icons.yaml         this app's drawings
-app/hooks/*.ts       the code escape hatch, referenced as path#export
+app/hooks/*.ts       the code escape hatch, referenced from a model as ../hooks/<file>.ts#<export>
 vendor/              the framework, packaged
 ```
 

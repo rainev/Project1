@@ -1,0 +1,133 @@
+# One sowing of lettuce into one area — the unit everything is counted by.
+#
+# Cycle (owner, 2026-09-26): seed on a Wednesday (day 0), germination check and
+# re-seed in the same cell on day 3, transplant 14 days after the check (day
+# 17), harvest once 28–30 days after transplant (day 45–47).
+#
+# The dates and percentages are computed by ../hooks/batch.ts, because config
+# cannot add days to a date, divide, or know the farm's time zone. They are
+# readOnly: a form shows them and never offers them as inputs.
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: batch
+title: Batch
+type: object
+properties:
+  # The lot code, e.g. 2026-W40-GH1-AREA-1. Named `title` because BoardScreen
+  # sorts every lane by `title`; the lot code is what a batch is called.
+  title:
+    title: Lot
+    type: string
+    readOnly: true
+  areaId:
+    title: Area
+    type: string
+    x-lookup:
+      model: area
+      label: name
+  crop:
+    title: Crop
+    type: string
+    maxLength: 60
+  seededOn:
+    title: Seeded on
+    type: string
+    format: date
+  cellsSown:
+    title: Cells sown
+    type: integer
+    minimum: 1
+  seedsPerCell:
+    title: Seeds per cell
+    type: integer
+    minimum: 1
+  status:
+    title: Stage
+    type: string
+    enum: [seeded, checked, transplanted, harvested, lost]
+  # Recorded at the germination check (day 3).
+  germinatedCells:
+    title: Cells germinated
+    type: integer
+    minimum: 0
+  reseededCells:
+    title: Cells re-seeded
+    type: integer
+    minimum: 0
+  # Recorded at transplant.
+  transplantedCount:
+    title: Plants transplanted
+    type: integer
+    minimum: 0
+  lostCount:
+    title: Plants discarded
+    type: integer
+    minimum: 0
+  # Recorded at harvest: weight only (owner, 2026-09-26).
+  harvestKg:
+    title: Harvest (kg)
+    type: number
+    minimum: 0
+  note:
+    title: Note
+    type: string
+    maxLength: 400
+  # Planned dates, set at seeding; the harvest window moves to the real
+  # transplant date when the batch is transplanted.
+  checkOn: { title: "Check due", type: string, format: date, readOnly: true }
+  transplantOn: { title: "Transplant due", type: string, format: date, readOnly: true }
+  harvestFrom: { title: "Harvest from", type: string, format: date, readOnly: true }
+  harvestTo: { title: "Harvest to", type: string, format: date, readOnly: true }
+  # What actually happened, stamped by the transition in Manila time.
+  checkedOn: { title: "Checked on", type: string, format: date, readOnly: true }
+  transplantedOn: { title: "Transplanted on", type: string, format: date, readOnly: true }
+  harvestedOn: { title: "Harvested on", type: string, format: date, readOnly: true }
+  # ISO week of seeding (2026-W40), for "by week" charts: queries cannot
+  # bucket dates.
+  seedWeek: { title: "Seed week", type: string, readOnly: true }
+  # germinated ÷ sown, at the check. The owner's priority metric.
+  germinationPct: { title: "Germination %", type: number, readOnly: true }
+  # transplanted ÷ sown, at transplant: the rate the sowing plan divides by.
+  transplantPct: { title: "Transplanted % of sown", type: number, readOnly: true }
+x-storage:
+  table: batches
+  notNull: [areaId, cellsSown, seedsPerCell]
+x-require:
+  create: [areaId, cellsSown, seedsPerCell]
+x-unique: [title]
+x-query:
+  sortable: [title, seededOn, status, checkOn, transplantOn, harvestFrom, germinationPct, createdAt]
+  filterable: [title, status, seedWeek, areaId]
+x-states:
+  field: status
+  initial: seeded
+  transitions:
+    check:
+      label: Germination check
+      from: [seeded]
+      to: checked
+      require: [germinatedCells, reseededCells]
+    transplant:
+      label: Transplant
+      from: [checked]
+      to: transplanted
+      require: [transplantedCount, lostCount]
+    harvest:
+      label: Harvest
+      from: [transplanted]
+      to: harvested
+      require: [harvestKg]
+    discard:
+      label: Mark lost
+      from: [seeded, checked, transplanted]
+      to: lost
+      require: [note]
+x-hooks:
+  beforeCreate:
+    - ../hooks/batch.ts#beforeCreate
+  beforeUpdate:
+    - ../hooks/batch.ts#beforeUpdate
+x-access:
+  read: "'staff' in actor.roles || 'admin' in actor.roles"
+  write: "'staff' in actor.roles || 'admin' in actor.roles"
+x-scope:
+  orgId: actor.orgId

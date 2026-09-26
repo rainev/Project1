@@ -1,0 +1,37 @@
+# An area inside a greenhouse: where one batch grows from transplant to
+# harvest. `plantSites` is its capacity, which the sowing plan divides by the
+# recent germination rate.
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: area
+title: Area
+type: object
+properties:
+  greenhouseId:
+    title: Greenhouse
+    type: string
+    x-lookup:
+      model: greenhouse
+      label: name
+  name:
+    title: Area name
+    type: string
+    minLength: 1
+    maxLength: 60
+  plantSites:
+    title: Plant sites
+    type: integer
+    minimum: 1
+  active:
+    title: Active
+    type: boolean
+x-storage:
+  table: areas
+  notNull: [greenhouseId, name, plantSites]
+x-require:
+  create: [greenhouseId, name, plantSites]
+x-unique: [name]
+x-access:
+  read: "'staff' in actor.roles || 'admin' in actor.roles"
+  write: "'admin' in actor.roles"
+x-scope:
+  orgId: actor.orgId

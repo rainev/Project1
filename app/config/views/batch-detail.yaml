@@ -1,0 +1,54 @@
+id: batch-detail
+route: /batches/:id
+title: Batch
+requires: batch
+# The next step for this batch as a full-width form, shown only in the stage
+# that admits it. On a phone this is the way to record a step: a grid's row
+# dialog opens under the grid's pinned actions column, which covers Confirm.
+node:
+  type: PageShell
+  props:
+    title: Batch
+  children:
+    - type: SessionBar
+    - type: Navigation
+    - type: FormScreen
+      when:
+        state: seeded
+      props:
+        model: batch
+        op: check
+        id: $id
+        title: Germination check
+        submitLabel: Record check
+        fields: [germinatedCells, reseededCells]
+    - type: FormScreen
+      when:
+        state: checked
+      props:
+        model: batch
+        op: transplant
+        id: $id
+        title: Transplant
+        submitLabel: Record transplant
+        fields: [transplantedCount, lostCount]
+    - type: FormScreen
+      when:
+        state: transplanted
+      props:
+        model: batch
+        op: harvest
+        id: $id
+        title: Harvest
+        submitLabel: Record harvest
+        fields: [harvestKg]
+    - type: DetailScreen
+      props:
+        model: batch
+        id: $id
+        backHref: /board
+    - type: TimelineScreen
+      props:
+        model: batch
+        id: $id
+        title: What happened to this batch

@@ -1,24 +1,133 @@
-# The same lifecycle, drawn as lanes. A board IS `x-states`: the lanes are the
-# state field's values and the moves are the declared transitions, so pointing
-# it at a model without one is refused at boot.
 id: board
 route: /board
 navOrder: 3
-nav: t:nav.board
-title: Editorial board
-requires: article
+nav: By stage
+title: Batches by stage
+requires: batch
+# One tab per stage, each a grid whose row buttons open a dialog for the count
+# that step records. This replaces BoardScreen: its move buttons send no
+# payload, so every step here (each requires a count) was refused from a card.
 node:
   type: PageShell
   props:
-    title: Editorial board
-    subtitle: >-
-      Lanes are the declared states; a card's moves are the transitions its
-      state admits, each judged by the server.
+    title: Batches by stage
+    subtitle: Each tab is a stage. A row's buttons are the steps it can take next.
   children:
     - type: SessionBar
-    - type: LanguagePicker
     - type: Navigation
-    - type: BoardScreen
+    - type: Tabs
       props:
-        model: article
-        titleField: title
+        tabs:
+          - id: seeded
+            label: Seeded
+          - id: checked
+            label: Checked
+          - id: transplanted
+            label: In greenhouse
+          - id: harvested
+            label: Harvested
+          - id: lost
+            label: Lost
+      children:
+        - type: DataGrid
+          slot: seeded
+          props:
+            model: batch
+            pageSize: 25
+            filter:
+              status: seeded
+            rowHref: /batches/:id
+            rowActions:
+              - op: check
+                label: Germination check
+                icon: check
+                title: Record the germination check
+                description: Count the cells that came up and the cells you re-seeded.
+              - op: discard
+                label: Mark lost
+                icon: trash
+                title: Mark this batch as lost?
+                description: Say what happened. The area becomes free.
+            columns:
+              - { field: title, label: Lot }
+              - { field: areaId, label: Area }
+              - { field: seededOn, label: Seeded }
+              - { field: checkOn, label: Check due }
+              - { field: cellsSown, label: Cells sown }
+        - type: DataGrid
+          slot: checked
+          props:
+            model: batch
+            pageSize: 25
+            filter:
+              status: checked
+            rowHref: /batches/:id
+            rowActions:
+              - op: transplant
+                label: Transplant
+                icon: send
+                title: Record the transplant
+                description: How many plants went to the area, and how many were discarded.
+              - op: discard
+                label: Mark lost
+                icon: trash
+                title: Mark this batch as lost?
+                description: Say what happened. The area becomes free.
+            columns:
+              - { field: title, label: Lot }
+              - { field: areaId, label: Area }
+              - { field: transplantOn, label: Transplant due }
+              - field: germinationPct
+                label: Germination %
+        - type: DataGrid
+          slot: transplanted
+          props:
+            model: batch
+            pageSize: 25
+            filter:
+              status: transplanted
+            rowHref: /batches/:id
+            rowActions:
+              - op: harvest
+                label: Harvest
+                icon: sparkles
+                title: Record the harvest
+                description: The total weight cut from this batch, in kg.
+              - op: discard
+                label: Mark lost
+                icon: trash
+                title: Mark this batch as lost?
+                description: Say what happened. The area becomes free.
+            columns:
+              - { field: title, label: Lot }
+              - { field: areaId, label: Area }
+              - { field: transplantedOn, label: Transplanted }
+              - { field: harvestFrom, label: Harvest from }
+              - { field: harvestTo, label: Harvest to }
+        - type: DataGrid
+          slot: harvested
+          props:
+            model: batch
+            pageSize: 25
+            filter:
+              status: harvested
+            rowHref: /batches/:id
+            columns:
+              - { field: title, label: Lot }
+              - { field: areaId, label: Area }
+              - { field: harvestedOn, label: Harvested }
+              - { field: harvestKg, label: kg }
+              - field: germinationPct
+                label: Germination %
+        - type: DataGrid
+          slot: lost
+          props:
+            model: batch
+            pageSize: 25
+            filter:
+              status: lost
+            rowHref: /batches/:id
+            columns:
+              - { field: title, label: Lot }
+              - { field: areaId, label: Area }
+              - { field: note, label: What happened }

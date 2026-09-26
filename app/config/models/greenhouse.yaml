@@ -1,0 +1,27 @@
+# A greenhouse. The farm has three, each divided into four areas (owner,
+# 2026-09-26). The owner maintains these; the team reads them.
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: greenhouse
+title: Greenhouse
+type: object
+properties:
+  name:
+    title: Name
+    type: string
+    minLength: 1
+    maxLength: 60
+  note:
+    title: Note
+    type: string
+    maxLength: 400
+x-storage:
+  table: greenhouses
+  notNull: [name]
+x-require:
+  create: [name]
+x-unique: [name]
+x-access:
+  read: "'staff' in actor.roles || 'admin' in actor.roles"
+  write: "'admin' in actor.roles"
+x-scope:
+  orgId: actor.orgId

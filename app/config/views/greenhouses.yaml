@@ -1,0 +1,35 @@
+id: greenhouses
+route: /setup/greenhouses
+navOrder: 4
+nav: Greenhouses
+title: Greenhouses
+# A page's `requires` is what projects a model's facts — its operations,
+# lookups and lifecycle — to the browser, and a page names one. So each model
+# the owner maintains gets its own page.
+requires: greenhouse
+x-access:
+  read: "'admin' in actor.roles"
+node:
+  type: PageShell
+  props:
+    title: Greenhouses
+    subtitle: The farm's greenhouses. Each one is divided into areas.
+  children:
+    - type: SessionBar
+    - type: Navigation
+    - type: FormScreen
+      props:
+        model: greenhouse
+        op: create
+        title: New greenhouse
+        submitLabel: Add greenhouse
+        fields: [name, note]
+    - type: DataGrid
+      props:
+        model: greenhouse
+        pageSize: 10
+        deletable: true
+        deleteIcon: trash
+        columns:
+          - { field: name, label: Greenhouse }
+          - { field: note, label: Note }

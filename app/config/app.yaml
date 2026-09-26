@@ -1,21 +1,9 @@
-# What the application is, as opposed to what it contains. One optional
-# document: every value here has a defensible default taken from the request.
-
-# Two languages, so the kit demonstrates what a multi-language app looks like.
-# The DEFAULT keeps bare paths (`/articles`) and every alternate is prefixed
-# (`/fil/articles`), so adding a language changes no address that already
-# exists. Delete this whole block and the app is single-language again —
-# nothing else has to change.
-languages:
-  default: en
-  alternates: [fil]
-  # How each language names ITSELF. This is what the picker draws.
-  labels:
-    en: English
-    fil: Filipino
+# What the application is, as opposed to what it contains.
+#
+# English only (owner, 2026-09-26): no `languages` block, so there is no
+# translation catalogue and every label is written in the view itself.
 
 # The address the public reaches this app at, for the canonical link, the
-# sitemap and robots.txt. Uncomment and set it once you have a domain: behind a
-# proxy that terminates TLS the request arrives over http, so without this a
-# crawler is told the insecure address is the authoritative one.
+# sitemap and robots.txt. Set it once the Railway URL exists: behind a proxy
+# that terminates TLS the request arrives over http.
 # publicOrigin: https://your-app.up.railway.app

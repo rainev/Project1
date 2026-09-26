@@ -1,0 +1,21 @@
+id: area-edit
+route: /setup/areas/:id
+title: Edit area
+requires: area
+x-access:
+  read: "'admin' in actor.roles"
+node:
+  type: PageShell
+  props:
+    title: Edit area
+  children:
+    - type: SessionBar
+    - type: Navigation
+    - type: FormScreen
+      props:
+        model: area
+        id: $id
+        title: Area
+        submitLabel: Save
+        fields: [greenhouseId, name, plantSites, active]
+        doneHref: /setup/areas

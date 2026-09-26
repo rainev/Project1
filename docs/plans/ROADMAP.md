@@ -8,7 +8,7 @@ opens first is the least current thing in the project.
 
 ## Active
 
-- [FARM-OPS.md](FARM-OPS.md) — hydroponic lettuce: batches, Today and the schedule manager, readings, dashboard. NOW: Phase 1, the batch cycle. Nothing built (checked 2026-09-26: `app/hooks/` absent, only kit demo models). Deferred items: [PRODUCTION-BACKLOG.md](PRODUCTION-BACKLOG.md).
+- [FARM-OPS.md](FARM-OPS.md) — hydroponic lettuce: batches, Today and the schedule manager, readings, dashboard. NOW: Phase 1, the batch cycle — built and driven live, awaiting owner confirmation (checked 2026-09-26: `app/hooks/batch.ts`, models `greenhouse`/`area`/`batch`). Deferred items: [PRODUCTION-BACKLOG.md](PRODUCTION-BACKLOG.md).
 
 ## The initiative file pattern
 
