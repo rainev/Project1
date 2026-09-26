@@ -18,9 +18,9 @@ That gives one unit of work per sowing, with dates derived from the seeding date
 | Stage | When | What the team does |
 |---|---|---|
 | Seed | Wednesday (day 0) | Sow trays in the nursery |
-| Germination check | day 0 + 3 (Saturday) | Count what came up; re-seed the gaps |
-| Transplant | 2 weeks later (read as day 0 + 14 — **to confirm**, see Q2) | Move plugs to the production farm |
-| Harvest window | transplant + 28–30 days | Harvest, weigh, record |
+| Germination check | day 0 + 3 (Saturday) | Count what came up; re-seed the gaps in the same cell |
+| Transplant | check + 14 = **day 17** (owner, 2026-09-26) | Move plugs to the production farm |
+| Harvest window | transplant + 28–30 = **day 45–47** | Harvest once (one cut), record |
 
 Industry practice (web research this session; search summaries, pages not opened, so `⚠`):
 
@@ -32,6 +32,15 @@ Industry practice (web research this session; search summaries, pages not opened
 - Scheduling works backward from a harvest date or forward from a seeding date. Upstart University
   gives 5–6 weeks from transplant to harvest for lettuce; the owner's 28–30 days is their own
   practice and is what applies here. `⚠`
+
+**Owner's answers (2026-09-26):**
+- **Crop.** Lettuce only for now.
+- **Transplant date.** Transplant is 2 weeks after the *check*, not after seeding.
+- **Counting and re-seeding.** Sowing is counted as seeds per cell. At the day-3 check the gaps are
+  re-seeded **in the same cell**.
+- **Harvest.** One cut per batch.
+- **Team.** Everyone does everything, so there is one staff role.
+- **Dashboard priority.** Germination comes first, because it feeds the inventory plan.
 
 ## 2. Ours today
 
@@ -63,7 +72,7 @@ germinated count and re-seeds → `checked` → on the transplant date "Transpla
 count moved and the losses → `transplanted` → from transplant + 28 days "Harvest window opens" →
 records the weight → `harvested`.
 
-**Where it breaks:** nothing puts "day 3", "day 14" or "day 42–44" on a row, because the framework
+**Where it breaks:** nothing puts "day 3", "day 17" or "day 45–47" on a row, because the framework
 cannot add days to a date in config (G1.2). Without those dates, "what is due today" has nothing to
 compare against, and batches 02 (tasks) and 04 (dashboard) both depend on it.
 
@@ -88,12 +97,13 @@ compare against, and batches 02 (tasks) and 04 (dashboard) both depend on it.
 
 | ID | Gap | Sev | Tag |
 |---|---|---|---|
-| G1.1 | No `batch` model: variety, seeded date, trays, cells, seeds per cell, lot code, stage. No `variety` model to pick from. | P0 | `✔` |
-| G1.2 | Stage due dates (check +3, transplant +14, harvest window +28 to +30 after transplant) **cannot be computed in declared config**. They need `app/hooks/batch.ts` with a `beforeCreate` hook, plus a hook on the transplant transition to recompute harvest from the real date. That is the app's first TypeScript. | P0 | `✔` |
+| G1.1 | No `batch` model: seeded date, cells, seeds per cell, lot code, stage. A `variety` pick-list can wait (lettuce only), but a `crop` text field keeps room for it. | P0 | `✔` |
+| G1.2 | Stage due dates (check day 3, transplant day 17 = check + 14, harvest window transplant + 28–30 = day 45–47) **cannot be computed in declared config**. They need `app/hooks/batch.ts` with a `beforeCreate` hook, plus a hook on the transplant transition to recompute harvest from the real date. That is the app's first TypeScript. | P0 | `✔` |
 | G1.3 | No lifecycle: `x-states` `seeded → checked → transplanted → harvested`, plus a way to record a batch lost or discarded at any stage. Each transition should `require` the count it records. | P0 | `✔` absent; fit `✔` read |
 | G1.4 | **Lens contradiction (coverage vs wiring).** Coverage says "recurring work → `x-schedules`, covered". Wiring says a schedule cannot mean *Wednesday* or *08:00*: `every: 7d` starts from the first boot and drifts after downtime. A weekly seeding reminder needs either a daily `1d` schedule whose code hook checks the weekday, or a person pressing **Start this week's seeding**. | P1 | `✔` |
-| G1.5 | Harvest is a window (28–30 days), not a date. Store `harvestFrom`/`harvestTo` so "ready" and "overdue" are separate states on the dashboard. | P1 | `✔` absent |
-| G1.6 | Counts per stage (sown cells, germinated, re-seeded, transplanted, lost, harvest weight) are the inputs to every dashboard ratio (germination %, survival, yield per tray). Missing any one of them now makes a KPI impossible later. | P1 | `⚠` KPI list relayed from research |
+| G1.5 | Harvest is a window (28–30 days), not a date; one cut, so a batch ends at `harvested`. Store `harvestFrom`/`harvestTo` so "ready" and "overdue" are separate states on the dashboard. | P1 | `✔` absent |
+| G1.6 | Counts per stage are the inputs to every dashboard ratio. The owner's priority KPI is germination, so the check transition must `require` **cells sown, seeds per cell, cells germinated and cells re-seeded**, and germination % = germinated ÷ sown must be computable from stored fields. Re-seeding happens in the same cell, so a re-seed does **not** add cells. Transplanted, lost and harvest weight follow. | **P0** (raised: owner priority) | `✔` owner-confirmed |
+| G1.9 | Inventory plan: germinated cells, plus the re-seeds that take, give the expected plants for transplant, which give the expected harvest on day 45–47. No field or query projects this forward yet. | P1 | `✔` owner-confirmed need |
 | G1.7 | No lot code. Harvest records are commonly tied to a traceability lot (for example FSMA 204 in the US for leafy greens). Whether any rule applies here depends on your jurisdiction and buyers. | P2 | `⚠` relayed, unconfirmed for this farm |
 | G1.8 | Mobile use in the nursery: `DataGrid` scrolls sideways on narrow screens by design (`13-screens.md` §DataGrid, AUD-200), so batch pages meant for a phone should favour `FormScreen`/`BoardScreen` over wide grids. | P2 | `⚠` doc-read, not driven at phone width |
 
