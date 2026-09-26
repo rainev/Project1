@@ -61,9 +61,9 @@ accepts it.
 
 | ID | Gap | Sev | Tag |
 |---|---|---|---|
-| G5.1 | **No in-app way for an invited person to join.** `LoginScreen` cannot send an invite token or join code. The options are: (a) a framework change (an `inviteToken`/`joinCode` field on `LoginScreen`, needing a new App-Stack release); (b) a register page opened only while the team signs up, then removed, with Members used to deactivate anyone unexpected; (c) the owner creates each account through the API and hands over the password for the person to change. The owner decides. | P0 | `✔` |
+| G5.1 | **No in-app way for an invited person to join.** `LoginScreen` cannot send an invite token or join code. **Owner decision (2026-09-26): a sign-up page that is open only while the team registers, then removed; plus accounts the owner creates directly.** Anyone unexpected is deactivated from Members. The framework option (an invite field on `LoginScreen`) stays a request for a future App-Stack release. | P0 | `✔` owner-decided |
 | G5.2 | Admin-only write on `routine`, `target` and `location`; staff write on `task`, `reading` and `batch` transitions; delete admin-only everywhere. | P1 | `✔` absent |
-| G5.3 | The kit's two languages (`en`, `fil` in `app.yaml`) mean every farm label needs a Filipino string too, or the `fil` pages show keys. Keep Filipino, or drop to English only. | P1 | `✔` `app.yaml` read; owner to decide |
+| G5.3 | **Owner decision: English only.** Remove the `languages` block from `app.yaml` and `locales/fil.yaml`, so no farm label needs a second string. | P1 | `✔` owner-decided |
 | G5.4 | Railway: the service must stay awake for schedules, run as a single instance, use Postgres, keep `APP_DEK`, and build with bun ≥ 1.4. Network access from this cloud environment to Railway is blocked. | P1 | `✔` bun and blocked network observed; sleep `⚠` |
 | G5.5 | The phone is the team's device, and the Today, reading and batch pages have not been driven at phone width. | P1 | `⚠` |
 | G5.6 | Email reminder deferred by the owner. | — | `✔` deferred |

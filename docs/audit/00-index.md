@@ -15,18 +15,18 @@ fact**, and never goes into a plan as settled.
 **Hydroponic farm operations app** — the owner's brief of 2026-09-26: weekly Wednesday seeding in the
 nursery, a germination check 3 days later, transplant to production 2 weeks later, harvest 28–30 days
 after that; a team that signs in to see the day's tasks and record what the dashboard needs; a
-dashboard of the business's metrics, germination first because it drives the inventory plan. Owner's answers (same day): lettuce only; transplant = check + 14 days (day 17); re-seed in the same cell; one cut; everyone does everything; wants a schedule manager; Philippine time; readings daily; one batch per greenhouse location; inventory plan = how many cells to sow; email reminder deferred; cells to sow +10% margin; location chosen at seeding; 3 greenhouse locations; harvest by weight only; pH/EC targets start at recommended values, editable in the app. Industry practice was researched the same day (search summaries
+dashboard of the business's metrics, germination first because it drives the inventory plan. Owner's answers (same day): lettuce only; transplant = check + 14 days (day 17); re-seed in the same cell; one cut; everyone does everything; wants a schedule manager; Philippine time; readings daily; one batch per greenhouse location; inventory plan = how many cells to sow; email reminder deferred; cells to sow +10% margin; location chosen at seeding; 3 greenhouses × 4 areas, one batch per area; harvest by weight only; pH/EC targets start at recommended values, editable in the app; temporary sign-up page plus owner-created accounts; English only. Industry practice was researched the same day (search summaries
 only, so `⚠`); sources are cited in each batch.
 
 ## Batches
 
 | # | Area | Reference | Status |
 |---|---|---|---|
-| 01 | [Crop cycle — seed → check → transplant → harvest](01-crop-cycle.md) | brief §cycle + owner answers | open — 9 gaps (4 P0) |
-| 02 | [Daily tasks and the schedule manager](02-daily-tasks.md) | brief §team + owner answers | open — 9 gaps (4 P0) |
-| 03 | [Readings and locations](03-readings.md) | owner answers + research | open — 6 gaps (3 P0) |
-| 04 | [Dashboard — germination first](04-dashboard.md) | owner answers + research | open — 8 gaps (3 P0) |
-| 05 | [Roles, onboarding, deployment](05-roles-onboarding-deploy.md) | AGENTS.md §design, DEPLOYING-RAILWAY.md | open — 6 gaps (1 P0) |
+| 01 | [Crop cycle — seed → check → transplant → harvest](01-crop-cycle.md) | brief §cycle + owner answers | open → planned in `plans/FARM-OPS.md` |
+| 02 | [Daily tasks and the schedule manager](02-daily-tasks.md) | brief §team + owner answers | open → planned in `plans/FARM-OPS.md` |
+| 03 | [Readings and locations](03-readings.md) | owner answers + research | open → planned in `plans/FARM-OPS.md` |
+| 04 | [Dashboard — germination first](04-dashboard.md) | owner answers + research | open → planned in `plans/FARM-OPS.md` |
+| 05 | [Roles, onboarding, deployment](05-roles-onboarding-deploy.md) | AGENTS.md §design, DEPLOYING-RAILWAY.md | open → planned in `plans/FARM-OPS.md` |
 
 
 ## Real surface (what exists today)
