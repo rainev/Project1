@@ -1,0 +1,17 @@
+# Optional, and allowed to be incomplete. A key that is not here renders in the
+# default language — which is what a translation in progress looks like, and why
+# a missing key here is not an error.
+nav.home: Simula
+nav.articles: Mga artikulo
+nav.insights: Mga pananaw
+nav.board: Pisara
+
+home.eyebrow: App-Stack Kit
+home.heading: Gawin ang app, [[idedeklara ang iba.]]
+home.subtitle: >-
+  Ang pahinang ito, ang talahanayan sa likod ng sign-in, ang pisara, ang ulat at
+  ang mga admin screen ay pawang YAML. I-fork ito, palitan ang config, at sa iyo
+  na ang sarili mong app.
+home.sign-in: Mag-sign in
+
+login.title: Mag-sign in

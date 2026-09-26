@@ -1,0 +1,18 @@
+id: login
+route: /login
+title: Sign in
+# A visitor has to be able to reach the sign-in page. Without this the page is
+# absent from their projection, and every path they try falls back to `/`.
+anonymous: true
+node:
+  type: PageShell
+  props:
+    title: t:login.title
+    subtitle: Server-side policy decides what you see. The browser holds no rules.
+  children:
+    # A visitor bounced here from `/fil/articles` is on the one page that has no
+    # navigation, so without this there is no way back to another language.
+    - type: LanguagePicker
+    - type: LoginScreen
+      props:
+        hint: An account is created for you by an invite, or by the org's join code.

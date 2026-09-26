@@ -1,0 +1,23 @@
+# A report and a chart from one declared query, scoped to the reader like any
+# other read. The CSV export goes through the same gates and the same scope.
+id: insights
+route: /insights
+navOrder: 4
+nav: t:nav.insights
+title: Insights
+node:
+  type: PageShell
+  props:
+    title: Insights
+    subtitle: One declared query, drawn twice. Neither drawing knows how to aggregate.
+  children:
+    - type: SessionBar
+    - type: LanguagePicker
+    - type: Navigation
+    - type: ReportScreen
+      props:
+        query: articlesByTopic
+        title: Articles by topic
+        description: Grouped and counted by the server; exportable within your scope.
+        pageSize: 10
+        exportable: true

@@ -1,0 +1,30 @@
+# A lookup target: the smallest model that is still a real one.
+#
+# It exists so `article.topicId` has something to point at, which is how a
+# relation is declared here — the field names the model, and the framework
+# resolves the label for a whole page in one request rather than one per row.
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: topic
+title: Topic
+type: object
+properties:
+  name:
+    type: string
+    minLength: 1
+    maxLength: 80
+x-storage:
+  table: topics
+  notNull: [name]
+x-require:
+  create: [name]
+x-unique: [name]
+x-query:
+  sortable: [name, createdAt]
+  filterable: [name]
+# Deny by default is the framework's posture, so both halves are stated. A
+# reader is anyone signed in; only an admin curates the list.
+x-access:
+  read: "'staff' in actor.roles || 'admin' in actor.roles"
+  write: "'admin' in actor.roles"
+x-scope:
+  orgId: actor.orgId

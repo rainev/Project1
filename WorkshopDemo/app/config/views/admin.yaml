@@ -1,0 +1,38 @@
+# Administration of identity — the page most apps forget.
+#
+# An app that models its domain object and stops has authentication and no way
+# to be operated: adding a colleague, changing a role or answering "who holds
+# admin?" has no in-product path, and nothing about that fails a test, because
+# what is missing is a surface rather than a behaviour.
+#
+# Nothing below is built here. Users, invites, orgs and the audit trail are
+# system models that ship with the framework; these two screens operate them.
+#
+# No `requires:`, because the page is not about a model — membership and the
+# join code write the framework's own system models, which generic dispatch
+# refuses by design. It carries its own policy instead, in the same JEXL every
+# other gate speaks, and the server re-checks every route regardless.
+id: admin
+route: /admin
+navOrder: 5
+nav: t:nav.admin
+title: Administration
+x-access:
+  read: "'admin' in actor.roles || 'platform' in actor.roles"
+node:
+  type: PageShell
+  props:
+    title: Administration
+    subtitle: >-
+      The organisation, its members and its invitations. Adopted from the
+      framework, not rebuilt here.
+  children:
+    - type: SessionBar
+    - type: LanguagePicker
+    - type: Navigation
+    - type: OrgScreen
+      props:
+        title: This organisation
+    - type: MembersScreen
+      props:
+        title: Members

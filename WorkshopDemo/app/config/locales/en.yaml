@@ -1,0 +1,18 @@
+# The default language's file is REQUIRED, and it is the fallback for every
+# other. A key missing here refuses the boot, naming the view and the key; a key
+# missing from another language renders these words instead.
+nav.home: Home
+nav.articles: Articles
+nav.insights: Insights
+nav.board: Board
+nav.admin: Admin
+
+home.eyebrow: App-Stack Kit
+home.heading: Build the app, [[declare the rest.]]
+home.subtitle: >-
+  This page, the grid behind the sign-in, the board, the report and the admin
+  screens are all YAML. Fork it, change the config, and you have your own app.
+home.sign-in: Sign in
+home.features: What it can do
+
+login.title: Sign in

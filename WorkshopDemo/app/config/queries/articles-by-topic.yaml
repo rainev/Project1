@@ -1,0 +1,27 @@
+# A declared query: a join, a grouping and a measure, with its own read policy.
+#
+# The component that draws it knows how to render a table and a chart; it does
+# not know how to aggregate. That is the point — the shape of the answer is
+# configuration, and the scope is applied underneath it like any other read.
+$id: articlesByTopic
+title: Articles by topic
+from: article
+join:
+  # By the RELATION FIELD, not by naming the model: `article.topicId` declares
+  # `x-lookup: { model: topic }`, so the framework knows what it joins to and
+  # binds that model's own scope into the join condition. Left by default, so
+  # an article with no topic is still a row.
+  - via: topicId
+groupBy:
+  - field: topic.name
+    as: topic
+    label: Topic
+measures:
+  - op: count
+    as: articles
+    label: Articles
+orderBy:
+  - field: articles
+    dir: desc
+x-access:
+  read: "'staff' in actor.roles || 'admin' in actor.roles"

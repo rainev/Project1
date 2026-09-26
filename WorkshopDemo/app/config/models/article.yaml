@@ -1,0 +1,105 @@
+# The one domain model, carrying the features an app usually needs at once:
+# a lifecycle, a relation, a field only some actors may read, an upload, and a
+# row a visitor may read without an account.
+#
+# Read it beside `docs/reference/stack/02-models.md`, which is the reference
+# for every keyword below.
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: article
+title: Article
+type: object
+properties:
+  title:
+    type: string
+    minLength: 1
+    maxLength: 160
+  slug:
+    type: string
+    minLength: 1
+    maxLength: 160
+  summary:
+    type: string
+    maxLength: 400
+  body:
+    type: string
+  # The lifecycle's own column. No form writes it: a create that set it would
+  # be refused, because `x-states.initial` owns the first value and the named
+  # transitions own every later one.
+  status:
+    type: string
+    # The lifecycle's states, named. Boot refuses `x-states` without them, and
+    # the enum is what lets a form render a select rather than a text box.
+    enum: [draft, review, published]
+  # A relation. The grid shows the topic's NAME, resolved for the whole page in
+  # one coalesced request rather than one per row.
+  topicId:
+    type: string
+    x-lookup:
+      model: topic
+      label: name
+  # Readable only by an editor. An unreadable field is ABSENT from the response
+  # and from the derived schema, not blank, so a form never offers a box the
+  # actor may not fill and a grid never draws an empty column.
+  #
+  # Not `x-encrypt: true`: field encryption is keyed per tenant and this model
+  # is readable by a visitor, who has none. The decrypt runs before the field
+  # policy drops the field, so the whole read fails with `decryption_failed`.
+  # Encrypt fields only on models a visitor cannot read
+  # (`docs/reference/stack/07-encryption.md`).
+  editorNote:
+    type: string
+  # An upload. The gates run before a single byte is read, and the download is
+  # gated per request rather than being a URL anyone may hold.
+  attachment:
+    type: string
+    # `format: binary` is what makes it a file rather than a string that happens
+    # to hold a name; boot refuses `x-upload` without it.
+    format: binary
+    x-upload:
+      accept: [image/png, image/jpeg, application/pdf]
+      maxSize: 2MB
+x-storage:
+  table: articles
+  notNull: [title, slug]
+x-require:
+  create: [title, slug]
+x-unique: [slug]
+x-query:
+  sortable: [title, status, createdAt]
+  filterable: [title, slug, status, topicId]
+x-states:
+  field: status
+  initial: draft
+  transitions:
+    submit:
+      from: [draft]
+      to: review
+      # About the STORED row, not the payload: an article reaches review with a
+      # summary or it does not reach review.
+      require: [summary]
+    publish:
+      from: [review]
+      to: published
+      # Narrows `x-access.write` for this move alone, and can never widen it.
+      access: "'admin' in actor.roles"
+    retract:
+      from: [published, review]
+      to: draft
+      access: "'admin' in actor.roles"
+x-field-access:
+  editorNote:
+    read: "'admin' in actor.roles || 'staff' in actor.roles"
+    write: "'admin' in actor.roles || 'staff' in actor.roles"
+x-access:
+  # A policy says who it admits. "true" reads as a policy nobody got round to.
+  read: "'anonymous' in actor.roles || 'staff' in actor.roles || 'admin' in actor.roles"
+  write: "'staff' in actor.roles || 'admin' in actor.roles"
+x-scope:
+  # One declaration, two worlds. A null is dropped, so a member is scoped to
+  # their org and sees drafts; a visitor is scoped to published rows instead.
+  #
+  # The lifecycle state IS the visibility. A separate `published` flag would be
+  # a second field meaning one thing, and the two drift silently: the
+  # transition moves the state, nothing writes the flag.
+  orgId: "'anonymous' in actor.roles ? null : actor.orgId"
+  status: "'anonymous' in actor.roles ? 'published' : null"

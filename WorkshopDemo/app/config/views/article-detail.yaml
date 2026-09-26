@@ -1,0 +1,25 @@
+# A detail page and the row's own history. `$id` comes from the route.
+id: article-detail
+route: /articles/:id
+title: Article
+requires: article
+node:
+  type: PageShell
+  props:
+    title: Article
+  children:
+    - type: SessionBar
+    - type: LanguagePicker
+    - type: Navigation
+    - type: DetailScreen
+      props:
+        model: article
+        id: $id
+        backHref: /articles
+    # What the framework recorded about this row. Nothing to declare beyond the
+    # model and the id — the audit trail is written by the pipeline itself.
+    - type: TimelineScreen
+      props:
+        model: article
+        id: $id
+        title: What happened to this article

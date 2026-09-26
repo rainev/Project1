@@ -1,0 +1,92 @@
+{
+  "source": "/Users/rv/work/GoodBehaviorBiz",
+  "sourceCommit": "bc41f9ce25b7aba2a71113a34ebac7a6c43c051e",
+  "installedAt": "2026-09-20T01:28:44+00:00",
+  "updatedAt": null,
+  "files": {
+    ".claude/skills/audit-goodbehavior/SKILL.md": {
+      "from": ".claude/skills/audit-goodbehavior/SKILL.md",
+      "sha256": "5d63eefb0fb39556dd7c7b02554d3c245be04b7e83ef6582b08f09fe32c5d641"
+    },
+    ".claude/skills/roadmap-goodbehavior/SKILL.md": {
+      "from": ".claude/skills/roadmap-goodbehavior/SKILL.md",
+      "sha256": "9cb39b87740a9acdf71ddb38c77a07bea76c557ef30bed20020e2ed6c9cd5e40"
+    },
+    ".claude/skills/gate-build-goodbehavior/SKILL.md": {
+      "from": ".claude/skills/gate-build-goodbehavior/SKILL.md",
+      "sha256": "e2b7f52b3fd5033e5578d61174a0cbbcf2a7692e7a64acaa53b0772cd2922163"
+    },
+    ".claude/skills/verify-goodbehavior/SKILL.md": {
+      "from": ".claude/skills/verify-goodbehavior/SKILL.md",
+      "sha256": "9cf564d567a490561836fd83aaec3d9572dc2d5911829f4dea65ba6cdb60b6ca"
+    },
+    ".claude/skills/uatplan-goodbehavior/SKILL.md": {
+      "from": ".claude/skills/uatplan-goodbehavior/SKILL.md",
+      "sha256": "8f5ab593ff93d53f57cd4aff457cc83d28f28ce659591d11e102cf87967ad7e2"
+    },
+    ".claude/skills/learn-goodbehavior/SKILL.md": {
+      "from": ".claude/skills/learn-goodbehavior/SKILL.md",
+      "sha256": "ba18852d8e255e9bf31542626c93e43d6a392b28b98b8166c07fe7c5b0daaa85"
+    },
+    ".claude/skills/update-goodbehavior/SKILL.md": {
+      "from": ".claude/skills/update-goodbehavior/SKILL.md",
+      "sha256": "401cd0e9d365ac06b4295a625627abec366d4860d66092a7964aeb68217d1976"
+    },
+    ".claude/skills/report-goodbehavior/SKILL.md": {
+      "from": ".claude/skills/report-goodbehavior/SKILL.md",
+      "sha256": "34922900dc35a7f49adfb24e0505ae40218ccd41ca38ad0e8c031be6f42f1d3c"
+    },
+    ".claude/skills/feeds-goodbehavior/SKILL.md": {
+      "from": ".claude/skills/feeds-goodbehavior/SKILL.md",
+      "sha256": "4c653c4c6cca4fec7d99b27858f460df53ada258fca9938f6d2a54d7ff96da56"
+    },
+    ".claude/skills/write-goodbehavior/SKILL.md": {
+      "from": ".claude/skills/write-goodbehavior/SKILL.md",
+      "sha256": "568ee5ef620d82f41128809e0a6e53456cee8d68f412527bc1e9010fb287f35e"
+    },
+    ".claude/goodbehavior/profiles/development.md": {
+      "from": "templates/profiles/development.md",
+      "sha256": "aeb9a752280048d5797204f4291310e89459d373536d22dc42cf02cf0a7876c4"
+    },
+    "docs/plans/ROADMAP.md": {
+      "from": "templates/ROADMAP.md",
+      "sha256": "c7a4992d5ff32012f71ccf24b734efc7fe8aadef73cdc7b9bff21934ac609926"
+    },
+    "docs/plans/PRODUCTION-BACKLOG.md": {
+      "from": "templates/PRODUCTION-BACKLOG.md",
+      "sha256": "b782e4319ff9d6618ca296db897a929341e805dec2e6456f323714b11fa000bf"
+    },
+    ".claude/goodbehavior/memory/MEMORY.md": {
+      "from": "templates/MEMORY.md",
+      "sha256": "3989eba16a2af0ff606b40783af10b167ed94ac9214a892b31fe6195d534e9c6"
+    },
+    ".claude/hooks/done-gate.js": {
+      "from": ".claude/hooks/done-gate.js",
+      "sha256": "dacc552ec7781eb4d53c89d982a86346ac91ea2fd294bc724032e59fd5d275ab"
+    },
+    ".claude/hooks/guard-bash.js": {
+      "from": ".claude/hooks/guard-bash.js",
+      "sha256": "c0394f64993cc92d16f14cebc7e17ca7e18d2f612376c51267bf30934618acec"
+    },
+    ".claude/hooks/guard-injection.js": {
+      "from": ".claude/hooks/guard-injection.js",
+      "sha256": "f5b0e578172bbab758d34f05430154cefaebf97446f0f496963850c7ea496929"
+    },
+    ".claude/goodbehavior/profiles/analysis.md": {
+      "from": "templates/profiles/analysis.md",
+      "sha256": "2a6a7dded4d3b82cca5107a6b3b41394ce7277f787bc31b10b321e0422a62897"
+    },
+    ".claude/goodbehavior/profiles/creative.md": {
+      "from": "templates/profiles/creative.md",
+      "sha256": "d7ff27b6545a8d4f5c1080909690e4dffe465e9be1b4ec503d4bceaf89ba6fa0"
+    },
+    ".claude/goodbehavior/profiles/research.md": {
+      "from": "templates/profiles/research.md",
+      "sha256": "b974064541b01fdc64ba8aba9870a03096437511fc7e6984bb57b8f2e36e3c29"
+    },
+    ".claude/goodbehavior/profiles/INDEX.md": {
+      "from": "templates/profiles/INDEX.md",
+      "sha256": "d3d57cebf522388b4d61a36ac7057cd7f8c1dbe85f08ee18c3768df264d36d0e"
+    }
+  }
+}

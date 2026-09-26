@@ -1,0 +1,24 @@
+# The same lifecycle, drawn as lanes. A board IS `x-states`: the lanes are the
+# state field's values and the moves are the declared transitions, so pointing
+# it at a model without one is refused at boot.
+id: board
+route: /board
+navOrder: 3
+nav: t:nav.board
+title: Editorial board
+requires: article
+node:
+  type: PageShell
+  props:
+    title: Editorial board
+    subtitle: >-
+      Lanes are the declared states; a card's moves are the transitions its
+      state admits, each judged by the server.
+  children:
+    - type: SessionBar
+    - type: LanguagePicker
+    - type: Navigation
+    - type: BoardScreen
+      props:
+        model: article
+        titleField: title

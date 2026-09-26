@@ -1,0 +1,67 @@
+# The public landing page. `anonymous: true` admits a visitor; deny by default
+# keeps every other page absent for one.
+id: home
+route: /
+navOrder: 1
+nav: t:nav.home
+title: App-Stack Kit
+description: >-
+  A working App-Stack application you can fork. Everything it does, it declares
+  in app/config — no application source, no framework source.
+anonymous: true
+node:
+  type: PageShell
+  props:
+    title: t:home.heading
+    eyebrow: t:home.eyebrow
+    eyebrowVariant: pill
+    subtitle: t:home.subtitle
+    actions:
+      - { label: t:home.sign-in, href: /login, emphasis: primary }
+      - { label: t:home.features, href: '#features', emphasis: secondary }
+  children:
+    - type: LanguagePicker
+    - type: Navigation
+    - type: ContentSection
+      props:
+        tone: hero
+        eyebrow: Start here
+        heading: Three things worth knowing before you change anything
+        body: >-
+          Config compiles at boot and only at boot, so a YAML edit does nothing
+          until the process restarts. Boot is the error surface — a misspelt
+          prop, state, field, icon or model refuses startup and names the
+          alternatives. And the framework is vendored: a capability that is
+          missing is a new release, never an edit inside .app-stack.
+    - type: ContentCards
+      props:
+        eyebrow: Features
+        heading: What this kit already demonstrates
+        variant: icon
+        columns: 2
+        items:
+          - title: A resource, fully gated
+            body: >-
+              One model document gives a table, an API, row and field policy,
+              multi-tenant scope and the schemas every form is built from.
+          - title: A lifecycle
+            body: >-
+              Named transitions with their own access, so "who may publish" is a
+              declaration rather than a branch in code.
+          - title: Identity, administered
+            body: >-
+              Users, invites, orgs and roles ship with the framework. The admin
+              page adopts them rather than rebuilding them.
+          - title: Reporting
+            body: >-
+              A declared query with joins and measures, drawn as a table and a
+              chart, scoped to the reader like everything else.
+    - type: ContentSection
+      props:
+        eyebrow: Where to read
+        heading: The reference ships with the release
+        body: >-
+          docs/reference/stack/ is the documentation for the exact framework
+          version this app runs. Start at 17-capabilities.md, which indexes it
+          by what you need rather than by layer, and says what the framework
+          does not do.

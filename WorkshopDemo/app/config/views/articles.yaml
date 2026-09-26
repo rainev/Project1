@@ -1,0 +1,69 @@
+# The working surface: create a row, then act on it.
+#
+# Demonstrates FormScreen built from the derived schema, and DataGrid with
+# server-side sort, filter, paging, a relation column, row actions drawn from
+# the lifecycle, and a pinned actions column.
+id: articles
+route: /articles
+navOrder: 2
+nav: t:nav.articles
+title: Articles
+# Absent from the projection for an actor who may not read articles.
+requires: article
+node:
+  type: PageShell
+  props:
+    title: Articles
+    subtitle: >-
+      Everything below is declared. A column you may not read is absent rather
+      than blank, and an action you may not perform is not drawn.
+  children:
+    - type: SessionBar
+    - type: LanguagePicker
+    - type: Navigation
+    - type: FormScreen
+      props:
+        model: article
+        op: create
+        title: New article
+        submitLabel: Create
+        # No `status`: the lifecycle owns it, and a create that set it is a 422.
+        fields: [title, slug, summary, body, topicId, editorNote, attachment]
+        multiline: [summary, body]
+    - type: DataGrid
+      props:
+        model: article
+        pageSize: 10
+        filterField: title
+        rowHref: /articles/:id
+        editHref: /articles/:id/edit
+        editIcon: edit
+        deletable: true
+        deleteIcon: trash
+        selectable: true
+        pageSizes: [5, 10, 25]
+        rowActions:
+          # Each is a declared transition. `when` narrows it to the rows whose
+          # state admits it, and the state names are checked at boot.
+          - op: submit
+            label: Submit for review
+            icon: send
+            title: Send this article to review?
+            when: { state: draft }
+          - op: publish
+            label: Publish
+            icon: check
+            title: Publish this article?
+            description: It becomes readable by any visitor.
+            when: { state: review }
+          - op: retract
+            label: Retract
+            icon: undo
+            title: Return this article to draft?
+            when: { state: [review, published] }
+        columns:
+          - { field: title, label: Title }
+          - { field: status, label: Status }
+          - { field: topicId, label: Topic }
+          - { field: editorNote, label: Editor note }
+          - { field: attachment, label: Attachment }
