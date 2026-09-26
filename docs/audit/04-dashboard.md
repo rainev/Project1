@@ -10,9 +10,9 @@ inventory plan, and **the inventory plan is how many cells to sow**. The other m
 Candidate metrics (research, `⚠`; Agrilyst reporting, iUNU LUNA): harvest vs plan, loss by stage,
 yield per plant or tray, days-to-harvest variance, readings out of range, and task completion.
 
-Working definition of the plan, to confirm:
+The plan:
 
-> cells to sow for a location = its plant sites ÷ recent germination rate (after re-seeding), rounded up
+> cells to sow for a location = ⌈ plant sites ÷ recent germination rate × 1.10 ⌉ — **owner-confirmed 2026-09-26, with a 10% safety margin**
 
 ## 2. Ours today
 
@@ -54,10 +54,10 @@ by week (line), batches by stage (bar), and harvest by batch (table, exportable)
 | ID | Gap | Sev | Tag |
 |---|---|---|---|
 | G4.1 | Stored derived fields on `batch`: `germinationPct` (at check), `seedWeek`, `survivalPct` (at transplant), computed in the batch hook because queries cannot divide or bucket dates. | P0 | `✔` |
-| G4.2 | **Sowing plan**: cells to sow per location for next Wednesday = plant sites ÷ recent germination rate. Computed in code, stored (e.g. on the seeding task or a `sowingPlan` row), shown as the dashboard's lead tile and on the Wednesday seeding task itself. | P0 | `✔` need owner-confirmed; formula `⚠` to confirm |
+| G4.2 | **Sowing plan**: cells to sow per location for next Wednesday = ⌈plant sites ÷ recent germination rate × 1.10⌉. Computed in code, stored (e.g. on the seeding task or a `sowingPlan` row), shown as the dashboard's lead tile and on the Wednesday seeding task itself. | P0 | `✔` need owner-confirmed; formula owner-confirmed (+10%) |
 | G4.3 | Germination tiles and trend: last batch, 4-batch average, and a by-week line chart. | P0 | `✔` absent |
 | G4.4 | Operations tiles: tasks due/done/overdue today, and readings out of range today. | P1 | `✔` absent |
 | G4.5 | Batches by stage (bar), and harvest per batch (report, CSV). | P1 | `✔` absent |
 | G4.6 | Replace the kit's `/insights`, `/articles` and `/board` demo pages and the `article`/`topic`/`ticket` models, so the navigation shows only the farm. | P1 | `✔` |
 | G4.7 | `ContentStats` reading a query is documented, not yet driven. Prove one tile live before building the row. | P1 | `⚠` |
-| G4.8 | **Unconfirmed.** Is harvest recorded as weight, heads, or both? The yield metrics depend on it. | P1 | `⚠` open question |
+| G4.8 | Harvest is recorded as **weight only** (owner, 2026-09-26): `harvestKg` is required on the harvest transition, and yield is kg per batch and kg per plant site. | P1 | `✔` owner-confirmed |
